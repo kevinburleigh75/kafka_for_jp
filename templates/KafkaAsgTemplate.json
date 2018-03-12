@@ -1,0 +1,108 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Metadata": {
+    },
+    "Resources": {
+        "KafkaSg": {
+            "Type" : "AWS::EC2::SecurityGroup",
+            "Properties" : {
+                "GroupName" : "kafka-sg",
+                "GroupDescription" : "for kafka-related servers",
+                "VpcId": "vpc-71872d0a"
+            }
+        },
+        "KafkaSgIngressHttp": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId": {
+                    "Ref": "KafkaSg"
+                },
+                "IpProtocol": "tcp",
+                "FromPort": "80",
+                "ToPort": "80",
+                "CidrIp": "0.0.0.0/0"
+            }
+        },
+        "KafkaSgIngressTcp": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId": {
+                    "Ref": "KafkaSg"
+                },
+                "IpProtocol": "tcp",
+                "FromPort": "22",
+                "ToPort": "22",
+                "CidrIp": "0.0.0.0/0"
+            }
+        },
+        "KafkaSgIngressIcmp": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId": {
+                    "Ref": "KafkaSg"
+                },
+                "IpProtocol": "icmp",
+                "FromPort": "-1",
+                "ToPort": "-1",
+                "CidrIp": "0.0.0.0/0"
+            }
+        },
+        "KafkaSgEgressAll": {
+            "Type": "AWS::EC2::SecurityGroupEgress",
+            "Properties": {
+                "GroupId": {
+                    "Ref": "KafkaSg"
+                },
+                "IpProtocol": "-1",
+                "CidrIp": "0.0.0.0/0"
+            }
+        }
+    },
+    "Parameters": {
+        "EnvName": {
+            "Description": "Name for this environment",
+            "Type": "String",
+            "ConstraintDescription": "'production' is special because image update will not occur, but otherwise almost anything goes"
+        },
+        "RepoUrl": {
+            "Description": "URL for git clone operation",
+            "Type": "String",
+            "ConstraintDescription": "must be the URL of an existing GitHub repo (applies only to non-production environments)"
+        },
+        "BranchNameOrSha": {
+            "Description": "git branch name (latest) or SHA to be used",
+            "Type": "String",
+            "ConstraintDescription": "must be the name of a valid branch or SHA (ignored in 'production' environment)"
+        },
+        "ImageId": {
+            "Description": "AMI to use in the LaunchConfiguration",
+            "Type": "AWS::EC2::Image::Id",
+            "ConstraintDescription": "must be the id of a valid AMI"
+        },
+        "KafkaDesiredCapacity": {
+            "Description": "The DesiredCapacity of KafkaAsg",
+            "Type": "Number",
+            "ConstraintDescription": "Must be between MinSize and MaxSize (inclusive)"
+        },
+        "ZookeeperDesiredCapacity": {
+            "Description": "The DesiredCapacity of ZookeeperAsg",
+            "Type": "Number",
+            "ConstraintDescription": "Must be between MinSize and MaxSize (inclusive)"
+        },
+        "KeyName": {
+            "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instances",
+            "Type": "AWS::EC2::KeyPair::KeyName",
+            "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
+        }
+    },
+    "Conditions": {
+        "IsProduction": {
+            "Fn::Equals": [
+                {
+                    "Ref": "EnvName"
+                },
+                "production"
+            ]
+        }
+    }
+}
