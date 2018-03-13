@@ -6,6 +6,7 @@ broker    ip: 35.172.83.230
 bin/kafka-topics.sh --list --zookeeper 35.170.9.183:2181
 bin/kafka-topics.sh --describe --zookeeper 35.170.9.183:2181 --topic topic1
 
+bin/kafka-topics.sh --create --zookeeper 35.170.9.183:2181 --replication-factor 3 --partitions 1 --config min.insync.replicas=2 --topic topic1
 bin/kafka-console-producer.sh --broker-list 35.172.83.230:9092 --topic topic1
 bin/kafka-console-consumer.sh --bootstrap-server 35.172.83.230:9092 --from-beginning --topic topic1
 
