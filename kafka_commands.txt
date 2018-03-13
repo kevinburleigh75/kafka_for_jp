@@ -1,13 +1,13 @@
 cd ~/kafka
 
 zookeeper ip: 35.170.9.183
-broker    ip: 54.175.110.242
+broker    ip: 35.172.83.230
 
 bin/kafka-topics.sh --list --zookeeper 35.170.9.183:2181
 bin/kafka-topics.sh --describe --zookeeper 35.170.9.183:2181 --topic topic1
 
-bin/kafka-console-producer.sh --broker-list [some broker ip]:9092 --topic topic1
-bin/kafka-console-consumer.sh --bootstrap-server [some broker ip]:9092 --from-beginning --topic topic1
+bin/kafka-console-producer.sh --broker-list 35.172.83.230:9092 --topic topic1
+bin/kafka-console-consumer.sh --bootstrap-server 35.172.83.230:9092 --from-beginning --topic topic1
 
 sudo systemctl stop  kevin_zookeeper.service
 sudo systemctl start kevin_zookeeper.service
