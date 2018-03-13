@@ -1,0 +1,15 @@
+export IMAGE_ID=ami-7f6aa912
+export ZOOKEEPER_DESIRED_CAPACITY=0
+export KAFKA_DESIRED_CAPACITY=0
+
+aws cloudformation create-stack \
+  --template-url https://s3.amazonaws.com/a15k-kafka-templates-for-jp/KafkaAsgTemplate.json \
+  --parameters \
+      ParameterKey=EnvName,ParameterValue=blah \
+      ParameterKey=BranchNameOrSha,ParameterValue=master \
+      ParameterKey=KeyName,ParameterValue=ox_kafka_east_1_kp \
+      ParameterKey=RepoUrl,ParameterValue=https://github.com/kevinburleigh75/kafka_for_jp.git \
+      ParameterKey=ImageId,ParameterValue=$IMAGE_ID \
+      ParameterKey=ZookeeperDesiredCapacity,ParameterValue=$ZOOKEEPER_DESIRED_CAPACITY \
+      ParameterKey=KafkaDesiredCapacity,ParameterValue=$KAFKA_DESIRED_CAPACITY \
+  --stack-name K1

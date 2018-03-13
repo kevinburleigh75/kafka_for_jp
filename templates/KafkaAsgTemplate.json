@@ -6,7 +6,6 @@
         "KafkaSg": {
             "Type" : "AWS::EC2::SecurityGroup",
             "Properties" : {
-                "GroupName" : "kafka-sg",
                 "GroupDescription" : "for kafka-related servers",
                 "VpcId": "vpc-71872d0a"
             }
@@ -74,18 +73,18 @@
             "Type": "String",
             "ConstraintDescription": "must be the name of a valid branch or SHA (ignored in 'production' environment)"
         },
-        "ImageId": {
-            "Description": "AMI to use in the LaunchConfiguration",
+        "KafkaImageId": {
+            "Description": "AMI to use for Kafka instances",
+            "Type": "AWS::EC2::Image::Id",
+            "ConstraintDescription": "must be the id of a valid AMI"
+        },
+        "ZookeeperImageId": {
+            "Description": "AMI to use for Zookeeper instances",
             "Type": "AWS::EC2::Image::Id",
             "ConstraintDescription": "must be the id of a valid AMI"
         },
         "KafkaDesiredCapacity": {
             "Description": "The DesiredCapacity of KafkaAsg",
-            "Type": "Number",
-            "ConstraintDescription": "Must be between MinSize and MaxSize (inclusive)"
-        },
-        "ZookeeperDesiredCapacity": {
-            "Description": "The DesiredCapacity of ZookeeperAsg",
             "Type": "Number",
             "ConstraintDescription": "Must be between MinSize and MaxSize (inclusive)"
         },
